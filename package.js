@@ -12,7 +12,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.use(['lepozepo:s3','froala:editor@2.0.5','templating',
-    'aldeed:autoform','iron:router'],['client', 'server']);  
+    'aldeed:autoform','iron:router'],['client', 'server']);
   api.addFiles(['afFroalaEditor.html','afFroalaEditor.js'],'client');
   api.addFiles(['imageUpload.js'],'server');
 });
