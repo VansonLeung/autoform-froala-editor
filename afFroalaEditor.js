@@ -20,11 +20,48 @@ Template.afFroalaEditor.onRendered(function(){
     var froala_skel = {
         inlineMode: false,
         buttons: [],
-        customDropdowns: {}
+        customDropdowns: {},
+        height: '400',
+        imageUploadURL: '/upload_image_froala'
     }
     // Assign basic editor variables
-    froala_skel.height = afDropdownOptions.height;
-    froala_skel.inlineMode = afDropdownOptions.inlineMode;
+    if(afDropdownOptions.height)
+        froala_skel.height = afDropdownOptions.height;
+    if(afDropdownOptions.inlineMode)
+        froala_skel.inlineMode = afDropdownOptions.inlineMode;
+    if(!afDropdownOptions.buttons)
+        afDropdownOptions.buttons = [
+        'bold',
+        'italic',
+        'underline',
+        'strikeThrough',
+        'subscript',
+        'superscript',
+        'fontFamily',
+        'fontSize',
+        'color',
+        'formatBlock',
+        'blockStyle',
+        'inlineStyle',
+        'align',
+        'insertOrderedList',
+        'insertUnorderedList',
+        'outdent',
+        'indent',
+        'selectAll',
+        'createLink',
+        'insertImage',
+        'insertVideo',
+        'table',
+        'undo',
+        'redo',
+        'html',
+        'insertHorizontalRule',
+        'uploadFile',
+        'removeFormat',
+        'fullscreen',
+        'sep'
+        ]
     froala_skel.toolbarButtons = afDropdownOptions.buttons;
     froala_skel.toolbarButtonsMD = afDropdownOptions.buttons;
     froala_skel.toolbarButtonsXS = afDropdownOptions.buttons;
@@ -32,6 +69,8 @@ Template.afFroalaEditor.onRendered(function(){
         froala_skel.imageUploadURL=afDropdownOptions.imageUploadURL
     // Make sure all dropdowns are added to buttons
     $.each(afDropdownOptions.customDropdowns,function(key, val){
+        if(typeof afDropdownOptions.customDropdowns[key].options === "function")
+            afDropdownOptions.customDropdowns[key].options = afDropdownOptions.customDropdowns[key].options()
         if(froala_skel.toolbarButtons.indexOf(key)==-1)
             froala_skel.toolbarButtons.push(key);
     });
