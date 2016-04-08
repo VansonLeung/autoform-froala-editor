@@ -1,6 +1,6 @@
 Busboy = Npm.require('busboy');
 
-Router.route("/upload_image_froala", {
+Router.route("/upload_image_froala_cfs/:cfs", {
     name: "upload.image.froala",
     where: 'server',
     onBeforeAction: function(req, res, next) {
@@ -14,6 +14,7 @@ Router.route("/upload_image_froala", {
             busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
                 var buffers;
                 image.name = filename;
+                image.filename = filename;
                 image.mimeType = mimetype;
                 image.encoding = encoding;
                 buffers = [];
@@ -38,31 +39,45 @@ Router.route("/upload_image_froala", {
         }
     },
     action: function() {
+        var cfs = this.params.cfs;
         var client, fs, name, pf, req, rsp, source;
         pf = this.request.files[0].name.split(".");
         pf = pf.pop();
-        name = Random.id()  + "." + pf;
         if (Meteor.isServer) {
-            fs = Npm.require('fs');
-            source = this.request.files[0].data;
-            client = S3.knox;
-            req = client.put("froala/"+name, {
-                'Content-Length': source.length,
-                'x-amz-acl': 'public-read'
-            });
+            // Find Collection FS model
             rsp = this.response;
-            req.on('response', function(res) {
+            var CFS = global[cfs];
+            if (CFS) {
 
-                if (200 === res.statusCode) {
-                    rsp.writeHead(200, {
-                        'Content-Type': 'text/json'
+                var Future = Npm.require('fibers/future');
+                var future = new Future();
+                var onComplete = future.resolver();
+
+                var image = this.request.files[0];
+                console.log(image);
+
+                var uploadedFile = new FS.File();
+                uploadedFile.attachData(image.data, {
+                    type: image.mimeType
+                }, function(err) {
+
+                    if (err) {
+                        console.log(err);
+                        return req.end(source);
+                    }
+
+                    uploadedFile.name(image.filename);
+
+                    var insertedFile = CFS.insert(uploadedFile, function(err, fileObj) {
+                        setTimeout(function() {
+                            console.log(fileObj.url({brokenIsFine: true}));
+                            return rsp.end(JSON.stringify({
+                                link: fileObj.url({brokenIsFine: true})
+                            }));
+                        }, 1000);
                     });
-                    return rsp.end(JSON.stringify({
-                        link: req.url
-                    }));
-                }
-            });
-            return req.end(source);
+                });
+            }
         }
     }
 });

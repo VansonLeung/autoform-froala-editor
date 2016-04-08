@@ -22,7 +22,7 @@ Template.afFroalaEditor.onRendered(function(){
         buttons: [],
         customDropdowns: {},
         height: '400',
-        imageUploadURL: '/upload_image_froala'
+        imageUploadURL: '/upload_image_froala_cfs/Images'
     }
     // Assign basic editor variables
     if(afDropdownOptions.height)
