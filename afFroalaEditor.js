@@ -22,11 +22,13 @@ Template.afFroalaEditor.onRendered(function(){
         buttons: [],
         customDropdowns: {},
         height: '400',
-        imageUploadURL: '/upload_image_froala_cfs/Images'
+        imageUploadURL: '/upload_image_froala_cfs/',
     }
     // Assign basic editor variables
     if(afDropdownOptions.height)
         froala_skel.height = afDropdownOptions.height;
+    if(afDropdownOptions.collection)
+        froala_skel.imageUploadURL = '/upload_image_froala_cfs/' + afDropdownOptions.collection;
     if(afDropdownOptions.inlineMode)
         froala_skel.inlineMode = afDropdownOptions.inlineMode;
     if(!afDropdownOptions.buttons)

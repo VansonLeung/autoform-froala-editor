@@ -61,7 +61,7 @@ iron:url@1.0.11
 jquery@1.11.7
 lepozepo:s3@5.1.5
 livedata@1.0.17
-local-test:vansonhk:autoform-froala-editor@0.1.12
+local-test:vansonhk:autoform-froala-editor@0.1.16
 localstorage@1.0.8
 logging@1.0.11
 meteor@1.1.13
@@ -96,6 +96,6 @@ tracker@1.0.12
 ui@1.0.10
 underscore@1.0.7
 url@1.0.8
-vansonhk:autoform-froala-editor@0.1.12
+vansonhk:autoform-froala-editor@0.1.16
 webapp@1.2.7
 webapp-hashing@1.0.8
