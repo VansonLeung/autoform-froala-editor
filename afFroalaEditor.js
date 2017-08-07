@@ -2,7 +2,14 @@ AutoForm.addInputType('froalaEditor', {
     template:"afFroalaEditor",
     valueOut: function(){
         return $(this).froalaEditor('html.get', true, true);
-    }
+    },
+    
+    contextAdjust(context) {
+        if (AutoForm && typeof AutoForm.getCurrentDataForForm === 'function') {
+          context.atts.uniDisabled = !!AutoForm.getCurrentDataForForm().disabled || context.atts.uniDisabled || false;
+        }
+        return context;
+    },
 });
 
 Template.afFroalaEditor.helpers({
@@ -17,6 +24,7 @@ Template.afFroalaEditor.helpers({
 Template.afFroalaEditor.onRendered(function(){
     var id = this.data.atts.id;
     var afDropdownOptions = this.data.atts.froalaOptions;
+    var is_disabled = this.data.atts.uniDisabled;
     var froala_skel = {
         inlineMode: false,
         buttons: [],
@@ -209,4 +217,17 @@ Template.afFroalaEditor.onRendered(function(){
         $('#' + id).froalaEditor('destroy');
     }
     $('#' + id).froalaEditor(froala_skel);
+    
+    if (is_disabled)
+    {
+        $('#' + id).froalaEditor('edit.off')
+        $('#' + id).froalaEditor('placeholder.hide')
+        $('#' + id).froalaEditor('toolbar.hide')
+    }
+    else
+    {  
+        $('#' + id).froalaEditor('edit.on')
+        $('#' + id).froalaEditor('placeholder.show')
+        $('#' + id).froalaEditor('toolbar.show')
+    }
 });
