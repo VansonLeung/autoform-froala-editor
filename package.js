@@ -1,6 +1,6 @@
 Package.describe({
   name: 'vansonhk:autoform-froala-editor',
-  version: '0.1.16',
+  version: '0.1.17',
   summary: 'Froala V2 WYSIWYG editor for autoform with templating ability and S3 image upload',
   git: 'https://github.com/VansonLeung/autoform-froala-editor',
   documentation: 'README.md'
