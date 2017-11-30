@@ -69,12 +69,17 @@ Router.route("/upload_image_froala_cfs/:cfs", {
                     uploadedFile.name(image.filename);
 
                     var insertedFile = CFS.insert(uploadedFile, function(err, fileObj) {
-                        Meteor.setTimeout(function() {
-                            console.log(fileObj.url({brokenIsFine: true}));
-                            return rsp.end(JSON.stringify({
+
+                        ImagesStore.on('stored', function(storeName, _fileObj) {
+                          if (_fileObj._id === fileObj._id) {
+                            Meteor.setTimeout(() => {
+                              console.log('res2: ', fileObj.url({brokenIsFine: true}));
+                              return rsp.end(JSON.stringify({
                                 link: fileObj.url({brokenIsFine: true})
-                            }));
-                        }, 1000);
+                              }));
+                            }, 1000)
+                          }
+                        });    
                     });
                 });
             }
